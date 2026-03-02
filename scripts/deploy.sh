@@ -5,16 +5,17 @@ set -e
 chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
 
-echo "DATABASE CONFIGS (DEBUG):"
+echo "ENVIRONMENT AUDIT:"
 echo "DB_CONNECTION: $DB_CONNECTION"
-echo "DB_HOST: $DB_HOST"
-echo "DB_PORT: $DB_PORT"
-echo "DB_DATABASE: $DB_DATABASE"
-echo "DB_USERNAME: $DB_USERNAME"
-
-if [ -z "$DB_HOST" ] && [ -z "$DB_URL" ]; then
-    echo "CRITICAL: No database host or URL found in environment!"
+if [ -n "$DB_URL" ]; then
+    echo "DB_URL is PRESENT (masked)"
+else
+    echo "DB_URL is MISSING"
 fi
+echo "DB_HOST: $DB_HOST (should be empty if using DB_URL)"
+
+# Neon SNI workaround: explicitly set the endpoint ID
+export PGOPTIONS="-c endpoint=ep-snowy-butterfly-aive3zr8"
 
 # Clear existing configuration caches
 php artisan config:clear
