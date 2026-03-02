@@ -9,6 +9,7 @@ services:
       npm run build
     startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
     preDeployCommand: |
+      php artisan config:clear
       php artisan migrate --force
       php artisan db:seed --force
     envVars:
@@ -21,14 +22,22 @@ services:
       - key: APP_URL
         sync: false
       - key: APP_KEY
-        generateValue: true
+        sync: false
       - key: LOG_CHANNEL
         value: stderr
       - key: LOG_LEVEL
         value: info
       - key: DB_CONNECTION
         value: pgsql
-      - key: DB_URL
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "5432"
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
         sync: false
       - key: DB_SSLMODE
         value: require
