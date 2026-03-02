@@ -27,6 +27,8 @@ services:
         value: neondb_owner
       - key: DB_PASSWORD
         sync: false
+      - key: DB_SSLMODE
+        value: require
       - key: FILESYSTEM_DISK
         value: public
       - key: SESSION_DRIVER
