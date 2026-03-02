@@ -2,15 +2,15 @@ services:
   - type: web
     name: orange-web
     runtime: php
-    plan: starter
+    plan: free
     buildCommand: |
       composer install --no-interaction --no-dev --optimize-autoloader
       npm ci
       npm run build
     startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
     preDeployCommand: |
-      php artisan key:generate --force
       php artisan migrate --force
+      php artisan db:seed --force
     envVars:
       - key: APP_NAME
         value: Orange
@@ -29,34 +29,18 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        fromDatabase:
-          name: orange-db
-          property: host
+        sync: false
       - key: DB_PORT
-        fromDatabase:
-          name: orange-db
-          property: port
+        value: "5432"
       - key: DB_DATABASE
-        fromDatabase:
-          name: orange-db
-          property: database
+        sync: false
       - key: DB_USERNAME
-        fromDatabase:
-          name: orange-db
-          property: user
+        sync: false
       - key: DB_PASSWORD
-        fromDatabase:
-          name: orange-db
-          property: password
+        sync: false
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE
         value: database
       - key: QUEUE_CONNECTION
         value: database
-
-databases:
-  - name: orange-db
-    databaseName: orange
-    user: orange
-    plan: starter

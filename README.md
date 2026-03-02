@@ -58,20 +58,43 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## Deploy on Render
+## Deploy on Render (Free)
 
-This repository now includes a `render.yaml` blueprint for one **PHP web service** and one **PostgreSQL database**.
+This repository includes a `render.yaml` blueprint for a **free Render web service**.
 
-### Quick steps
+### 1) Create a free PostgreSQL database
+
+Render's free web service is supported by this blueprint, but you should use a free external PostgreSQL provider (for example, Neon or Supabase) for database hosting.
+
+Create a PostgreSQL database and keep these values:
+
+- host
+- port (usually `5432`)
+- database name
+- username
+- password
+
+### 2) Deploy the web service on Render
 
 1. Push this repository to GitHub.
-2. In Render, create a new **Blueprint** service from the repo (Render will detect `render.yaml`).
-3. Set `APP_URL` in Render to your real Render service URL (or custom domain).
-4. Deploy.
+2. In Render, click **New +** → **Blueprint**.
+3. Select this repository (Render detects `render.yaml`).
+4. Set these environment variables in Render before first deploy:
+   - `APP_URL` = your Render URL (for example `https://orange-web.onrender.com`)
+   - `DB_HOST`
+   - `DB_DATABASE`
+   - `DB_USERNAME`
+   - `DB_PASSWORD`
+5. Deploy.
 
-### Notes
+### 3) Add the link to your resume
 
-- Build runs Composer install + Vite build.
-- Deploy runs migrations automatically.
-- `APP_KEY` is generated automatically by Render from the blueprint.
-- The app is configured for PostgreSQL in Render by default.
+After deploy succeeds, use your Render public URL in your resume/portfolio.
+
+### What the blueprint does
+
+- Uses Render **free** web plan.
+- Builds with Composer + Vite.
+- Starts Laravel with `php artisan serve` bound to `$PORT`.
+- Runs migrations and seeding on deploy.
+- Auto-generates `APP_KEY`.
