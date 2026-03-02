@@ -39,29 +39,20 @@ class UpdateProductImagesSeeder extends Seeder
         $products = Product::get();
         $count = 0;
 
+        /** @var Product $product */
         foreach ($products as $product) {
-            // Check if images is empty or null (using the JSON attribute)
-            if (empty($product->images)) {
+            // Check if product has any images via the relationship
+            if ($product->images()->count() === 0) {
                 $categorySlug = $product->category ? $product->category->slug : 'default';
                 $pool = $images[$categorySlug] ?? $images['default'];
                 $imagePath = $pool[array_rand($pool)];
 
-                // Update product's inline images array (JSON column)
-                $imageArray = [['path' => $imagePath, 'is_primary' => true]];
-                $product->update([
-                    'images' => $imageArray
+                // Create ProductImage record
+                ProductImage::create([
+                    'product_id' => $product->id,
+                    'path' => $imagePath,
+                    'is_primary' => true
                 ]);
-
-                // Also create ProductImage record if the table exists for compatibility
-                try {
-                    ProductImage::create([
-                        'product_id' => $product->id,
-                        'path' => $imagePath,
-                        'is_primary' => true
-                    ]);
-                } catch (\Exception $e) {
-                    // Ignore if table doesn't exist
-                }
 
                 $this->command->info("Added image to: {$product->name}");
                 $count++;
