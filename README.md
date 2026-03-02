@@ -60,52 +60,41 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Deploy on Render (Free, Fresh Start)
 
-This repo includes `render.yaml` for a **new Render deployment from scratch** using Neon PostgreSQL.
+This repo includes `render.yaml` for a fresh Render deployment with Neon PostgreSQL.
 
-### Why your deploy failed
+### Why it is still failing now
 
-Your log shows: `fe_sendauth: no password supplied`. That means Render reached Neon, but Laravel did not receive a DB password in runtime env.
+Your latest logs changed from `no password supplied` to `password authentication failed`.
 
-### 0) Security first (important)
+That means Render is now sending a password, but it is not the current valid Neon password for `neondb_owner`.
 
-If you shared your Neon connection string publicly, rotate the Neon database password first, then use the updated credentials below.
+### Fix (most reliable): use only `DB_URL`
 
-### 1) Fresh deployment steps (recommended: split DB vars)
+1. In Neon, copy the full connection string again (latest password).
+2. In Render service **Environment**:
+   - set `APP_KEY` (from `php artisan key:generate --show`)
+   - set `DB_URL` to the full Neon URL
+3. Remove old split DB vars from Render service if present (`DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) to avoid stale values confusion.
+4. Save changes and click **Manual Deploy** → **Clear build cache & deploy**.
 
-1. Push this repository to GitHub.
-2. In Render, click **New +** → **Blueprint**.
-3. Select this repository (Render detects `render.yaml`).
-4. In the Render web service env vars, set:
-   - `APP_URL` = your Render URL (example: `https://orange-web.onrender.com`)
-   - `APP_KEY` = output of `php artisan key:generate --show` (full `base64:...` value)
-   - `DB_HOST` = Neon host (for you: `ep-snowy-butterfly-aive3zr8.us-east-1.aws.neon.tech`)
-   - `DB_PORT` = `5432`
-   - `DB_DATABASE` = `neondb`
-   - `DB_USERNAME` = `neondb_owner`
-   - `DB_PASSWORD` = your Neon DB password
-5. Deploy.
+### If it still fails
 
-### 2) If Render asks only for `APP_KEY` and `DB_PASSWORD`
+- Rotate/reset Neon DB password and paste the new URL into `DB_URL`.
+- Confirm username is `neondb_owner` and db name is `neondb` in the URL.
+- Confirm no extra spaces/newlines in `DB_URL` in Render.
 
-That is expected when some vars are already populated. Still ensure all DB vars above are present in the service environment.
+### First deploy verification
 
-### 3) First deploy verification
+After deploy succeeds:
 
-After deploy finishes:
-
-- Open the Render URL and confirm the home page loads.
-- Check Render logs for successful migration + seed execution.
-- Login with seeded demo users:
+- Open your Render URL and confirm the home page loads.
+- Check logs for migration + seeding success.
+- Login with demo users:
   - Admin: `admin@orange.test` / `password`
   - Customer: `customer@orange.test` / `password`
 
-### 4) Add it to your resume
-
-Use the Render public URL in your resume projects section.
-
 ### Notes
 
-- `DB_SSLMODE=require` is already set for Neon TLS.
-- Deploy clears config cache before migrate so new env vars are picked up.
-- If credentials change later, update Render env vars and redeploy.
+- `php artisan config:clear` runs before migrations so latest env vars are used.
+- `DB_SSLMODE=require` is set for Neon TLS.
 
