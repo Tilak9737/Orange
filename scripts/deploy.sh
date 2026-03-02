@@ -5,6 +5,8 @@ set -e
 chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
 
+echo "Connecting to database host: $DB_HOST"
+
 # Run migrations (force for production)
 php artisan migrate --force
 
