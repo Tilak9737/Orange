@@ -57,3 +57,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deploy on Render
+
+This repository now includes a `render.yaml` blueprint for one **PHP web service** and one **PostgreSQL database**.
+
+### Quick steps
+
+1. Push this repository to GitHub.
+2. In Render, create a new **Blueprint** service from the repo (Render will detect `render.yaml`).
+3. Set `APP_URL` in Render to your real Render service URL (or custom domain).
+4. Deploy.
+
+### Notes
+
+- Build runs Composer install + Vite build.
+- Deploy runs migrations automatically.
+- `APP_KEY` is generated automatically by Render from the blueprint.
+- The app is configured for PostgreSQL in Render by default.
