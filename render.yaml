@@ -17,8 +17,18 @@ services:
         value: stderr
       - key: DB_CONNECTION
         value: pgsql
-      - key: DB_URL
+      - key: DB_HOST
+        value: ep-snowy-butterfly-aive3zr8.us-east-1.aws.neon.tech
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: neondb
+      - key: DB_USERNAME
+        value: neondb_owner
+      - key: DB_PASSWORD
         sync: false
+      - key: DB_SSLMODE
+        value: require
       - key: FILESYSTEM_DISK
         value: public
       - key: SESSION_DRIVER

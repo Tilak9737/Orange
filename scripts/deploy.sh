@@ -7,9 +7,8 @@ chown -R www-data:www-data storage bootstrap/cache
 
 echo "Connecting to database host: $DB_HOST"
 
-# Clear existing caches to ensure fresh env variables are loaded
+# Clear existing configuration caches
 php artisan config:clear
-php artisan cache:clear
 
 echo "Connecting to database host: $DB_HOST"
 if [ -z "$DB_HOST" ]; then
