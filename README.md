@@ -76,6 +76,24 @@ If you shared your Neon connection string publicly, rotate the Neon database pas
    - `DB_URL` = your full Neon connection string
 5. Click **Deploy**.
 
+
+### If Render asks for `APP_KEY` and `DB_PASSWORD`
+
+If Render still prompts for these fields during setup, use:
+
+- `APP_KEY`: generate locally with:
+  - `php artisan key:generate --show`
+  - copy the full output (starts with `base64:`) into Render `APP_KEY`.
+- `DB_PASSWORD`: from your Neon URL, it is the password between `:` and `@` after the username.
+
+For your shared example URL format:
+
+- `postgresql://neondb_owner:<DB_PASSWORD>@ep-.../neondb?...`
+
+So you should paste only that `<DB_PASSWORD>` value into Render `DB_PASSWORD`.
+
+> Tip: If you use `DB_URL`, `DB_PASSWORD` may be redundant for Laravel, but setting it in Render is safe and can satisfy setup prompts.
+
 ### 2) First deploy verification
 
 After deploy finishes:
