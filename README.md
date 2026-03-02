@@ -62,26 +62,35 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 This repo includes `render.yaml` for a fresh Render deployment with Neon PostgreSQL.
 
-### Why it is still failing now
+### What your latest error means
 
-Your latest logs changed from `no password supplied` to `password authentication failed`.
+Your newest log shows connection fallback to `127.0.0.1` and `Database: laravel`.
 
-That means Render is now sending a password, but it is not the current valid Neon password for `neondb_owner`.
+That means Render did **not** provide valid DB env vars at runtime, so Laravel used defaults (`DB_HOST=127.0.0.1`, `DB_DATABASE=laravel`).
 
-### Fix (most reliable): use only `DB_URL`
+### Updated blueprint behavior
 
-1. In Neon, copy the full connection string again (latest password).
-2. In Render service **Environment**:
-   - set `APP_KEY` (from `php artisan key:generate --show`)
-   - set `DB_URL` to the full Neon URL
-3. Remove old split DB vars from Render service if present (`DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) to avoid stale values confusion.
-4. Save changes and click **Manual Deploy** → **Clear build cache & deploy**.
+`render.yaml` now hardcodes safe Neon non-secret values:
+
+- `DB_HOST=ep-snowy-butterfly-aive3zr8.us-east-1.aws.neon.tech`
+- `DB_PORT=5432`
+- `DB_DATABASE=neondb`
+- `DB_USERNAME=neondb_owner`
+
+You only need to provide one DB secret in Render: `DB_PASSWORD`.
+
+### Exact steps now
+
+1. In Render service → **Environment**, set:
+   - `APP_KEY` (from `php artisan key:generate --show`)
+   - `DB_PASSWORD` (your current Neon password)
+2. Make sure old `DB_URL` is removed if it exists (to avoid conflicting config).
+3. Manual Deploy → **Clear build cache & deploy**.
 
 ### If it still fails
 
-- Rotate/reset Neon DB password and paste the new URL into `DB_URL`.
-- Confirm username is `neondb_owner` and db name is `neondb` in the URL.
-- Confirm no extra spaces/newlines in `DB_URL` in Render.
+- Reset/rotate Neon password, update Render `DB_PASSWORD`, redeploy.
+- Confirm no leading/trailing spaces in `DB_PASSWORD`.
 
 ### First deploy verification
 
