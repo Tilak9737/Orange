@@ -28,16 +28,10 @@ services:
         value: info
       - key: DB_CONNECTION
         value: pgsql
-      - key: DB_HOST
+      - key: DB_URL
         sync: false
-      - key: DB_PORT
-        value: "5432"
-      - key: DB_DATABASE
-        sync: false
-      - key: DB_USERNAME
-        sync: false
-      - key: DB_PASSWORD
-        sync: false
+      - key: DB_SSLMODE
+        value: require
       - key: SESSION_DRIVER
         value: database
       - key: CACHE_STORE
