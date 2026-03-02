@@ -15,9 +15,11 @@ if [ -z "$DB_HOST" ]; then
     echo "Using DB_URL from environment"
 fi
 
-# Run migrations. Using :fresh for initial setup to clear any partial tables.
-# Once the site is live, we will change this back to 'migrate --force'.
-php artisan migrate:fresh --force --seed
+# Neon SNI workaround: explicitly set the endpoint ID
+export PGOPTIONS="-c endpoint=ep-snowy-butterfly-aive3zr8"
+
+# Run migrations. We already seeded locally, so just ensure schema is up to date.
+php artisan migrate --force
 
 # Re-optimize Laravel for production
 php artisan config:cache
