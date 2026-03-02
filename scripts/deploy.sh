@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Ensure storage and bootstrap/cache are writable
 chmod -R 775 storage bootstrap/cache

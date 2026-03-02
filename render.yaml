@@ -16,7 +16,7 @@ services:
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        value: ep-snowy-butterfly-aive3zr8-pooler.c-4.us-east-1.aws.neon.tech
+        value: ep-snowy-butterfly-aive3zr8.us-east-1.aws.neon.tech
       - key: DB_PORT
         value: 5432
       - key: DB_DATABASE
