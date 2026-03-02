@@ -7,10 +7,20 @@ chown -R www-data:www-data storage bootstrap/cache
 
 echo "Connecting to database host: $DB_HOST"
 
-# Run migrations (force for production)
-php artisan migrate --force
+# Clear existing caches to ensure fresh env variables are loaded
+php artisan config:clear
+php artisan cache:clear
 
-# Optimize Laravel for production
+echo "Connecting to database host: $DB_HOST"
+if [ -z "$DB_HOST" ]; then
+    echo "Using DB_URL from environment"
+fi
+
+# Run migrations. Using :fresh for initial setup to clear any partial tables.
+# Once the site is live, we will change this back to 'migrate --force'.
+php artisan migrate:fresh --force --seed
+
+# Re-optimize Laravel for production
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
