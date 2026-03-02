@@ -1,0 +1,554 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --c-orange: #FF6B00;
+        --c-orange-light: #FF8533;
+        --c-orange-glow: rgba(255, 107, 0, 0.15);
+        --c-bg: #0A0A0A;
+        --c-surface: #141414;
+        --c-surface-hover: #1A1A1A;
+        --c-text: #FFFFFF;
+        --c-text-muted: #A1A1AA;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-full: 9999px;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--c-bg);
+        color: var(--c-text);
+        font-family: 'Outfit', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .font-heading {
+        font-family: 'Syne', sans-serif;
+    }
+}
+
+@layer components {
+
+    /* Glassmorphism Panel */
+    .glass-panel {
+        background: rgba(20, 20, 20, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Base Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1.25rem;
+        font-weight: 600;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+    /* Primary Button */
+    .btn-primary {
+        background-color: var(--c-orange);
+        color: white;
+        border: 1px solid var(--c-orange);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--c-orange-light);
+        border-color: var(--c-orange-light);
+        transform: translateY(-2px);
+    }
+
+    /* Outline Button */
+    .btn-outline {
+        background-color: transparent;
+        color: var(--c-text);
+        border: 1px solid #333;
+    }
+
+    .btn-outline:hover {
+        border-color: var(--c-orange);
+        color: var(--c-orange);
+        background-color: var(--c-orange-glow);
+    }
+
+    /* Form Controls */
+    .form-control {
+        width: 100%;
+        background-color: var(--c-surface-hover);
+        border: 1px solid #333;
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--c-orange);
+        box-shadow: 0 0 0 2px var(--c-orange-glow);
+    }
+
+    .form-control::placeholder {
+        color: #555;
+    }
+}
+
+/* Custom Selection */
+::selection {
+    background: var(--c-orange);
+    color: white;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--c-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--c-orange);
+}
+
+/* Custom Cursor */
+.cursor-dot,
+.cursor-outline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--c-orange);
+}
+
+.cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--c-orange-glow);
+}
+
+/* Skeleton Loader */
+.skeleton {
+    background: linear-gradient(-45deg, var(--c-surface-hover) 25%, #222 50%, var(--c-surface-hover) 75%);
+    background-size: 400% 400%;
+    animation: skeleton-load 1.5s ease infinite;
+}
+
+@keyframes skeleton-load {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Sold Out & Stock Styles */
+.sold-out-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+    /* Increased z-index */
+    pointer-events: none;
+}
+
+.sold-out-text {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 3px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 0.4rem 0.8rem;
+    transform: rotate(-12deg);
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.stock-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    z-index: 10;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.stock-low {
+    background: rgba(255, 107, 0, 0.9);
+    color: white;
+    box-shadow: 0 0 10px var(--c-orange-glow);
+}
+
+.stock-out {
+    background: #ef4444;
+    color: white;
+}
+
+/* Crystalline & Advanced Glassmorphism */
+.crystalline-card {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+        0 15px 35px 0 rgba(0, 0, 0, 0.5),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.crystalline-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.crystalline-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.25);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.crystalline-card:hover::before {
+    opacity: 1;
+}
+
+.crystalline-card .corner-accent {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    border: 2px solid transparent;
+    transition: all 0.6s ease;
+}
+
+.crystalline-card .top-left {
+    top: 0;
+    left: 0;
+    border-top-color: inherit;
+    border-left-color: inherit;
+    border-top-left-radius: 1.5rem;
+}
+
+.crystalline-card .bottom-right {
+    bottom: 0;
+    right: 0;
+    border-bottom-color: inherit;
+    border-right-color: inherit;
+    border-bottom-right-radius: 1.5rem;
+}
+
+.crystalline-card:hover .corner-accent {
+    width: 25px;
+    height: 25px;
+}
+
+.glow-orange-crystalline:hover {
+    border-color: rgba(255, 107, 0, 0.5) !important;
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.15), inset 0 0 15px rgba(255, 107, 0, 0.1);
+}
+
+.glow-blue-crystalline:hover {
+    border-color: rgba(59, 130, 246, 0.5) !important;
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), inset 0 0 15px rgba(59, 130, 246, 0.1);
+}
+
+.glow-purple-crystalline:hover {
+    border-color: rgba(168, 85, 247, 0.5) !important;
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.15), inset 0 0 15px rgba(168, 85, 247, 0.1);
+}
+
+.glow-pink-crystalline:hover {
+    border-color: rgba(236, 72, 153, 0.5) !important;
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.15), inset 0 0 15px rgba(236, 72, 153, 0.1);
+}
+
+.glow-emerald-crystalline:hover {
+    border-color: rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.15), inset 0 0 15px rgba(16, 185, 129, 0.1);
+}
+
+/* Grain Effect */
+.grain-overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Premium Crystalline Dropdown */
+.crystalline-dropdown {
+    background: rgba(12, 12, 12, 0.97) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+    padding: 6px !important;
+    overflow: hidden;
+}
+
+/* Each dropdown row */
+.crystalline-dropdown a.dropdown-item-premium,
+.crystalline-dropdown button.dropdown-item-premium {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 14px !important;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #A1A1AA !important;
+    text-decoration: none;
+    background: transparent !important;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    border-radius: 8px;
+    margin: 1px 0;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.4;
+}
+
+.crystalline-dropdown a.dropdown-item-premium i,
+.crystalline-dropdown button.dropdown-item-premium i {
+    font-size: 1rem;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.crystalline-dropdown a.dropdown-item-premium:hover,
+.crystalline-dropdown button.dropdown-item-premium:hover {
+    background: rgba(255, 107, 0, 0.1) !important;
+    color: #FF6B00 !important;
+    transform: translateX(3px);
+}
+
+.crystalline-dropdown button.dropdown-item-premium.logout:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 4px 10px;
+}
+
+/* Corner Accents - explicit color per card type */
+.glow-orange-crystalline .corner-accent {
+    border-color: rgba(255, 107, 0, 0.4);
+}
+
+.glow-blue-crystalline .corner-accent {
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.glow-purple-crystalline .corner-accent {
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+.glow-pink-crystalline .corner-accent {
+    border-color: rgba(236, 72, 153, 0.4);
+}
+
+.glow-emerald-crystalline .corner-accent {
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.glow-orange-crystalline:hover .corner-accent {
+    border-color: rgba(255, 107, 0, 0.9);
+}
+
+.glow-blue-crystalline:hover .corner-accent {
+    border-color: rgba(59, 130, 246, 0.9);
+}
+
+.glow-purple-crystalline:hover .corner-accent {
+    border-color: rgba(168, 85, 247, 0.9);
+}
+
+.glow-pink-crystalline:hover .corner-accent {
+    border-color: rgba(236, 72, 153, 0.9);
+}
+
+.glow-emerald-crystalline:hover .corner-accent {
+    border-color: rgba(16, 185, 129, 0.9);
+}
+
+/* Admin body override */
+body.admin-body {
+    background-color: #050505;
+}
+
+/* Admin Topbar */
+.admin-topbar {
+    height: 72px;
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+}
+
+/* Avatar for admin topbar */
+.avatar-crystalline {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 107, 0, 0.12);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.875rem;
+    color: var(--c-orange);
+    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.avatar-crystalline:hover {
+    transform: scale(1.08) rotate(4deg);
+    border-color: var(--c-orange);
+    box-shadow: 0 0 18px rgba(255, 107, 0, 0.25);
+    background: rgba(255, 107, 0, 0.2);
+}
+
+.admin-sidebar {
+    width: 280px;
+    transition: var(--transition);
+    z-index: 40;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--c-surface);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-main {
+    margin-left: 280px;
+    transition: var(--transition);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    color: var(--c-text-muted);
+    font-weight: 500;
+    transition: var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+    background-color: var(--c-surface-hover);
+    color: var(--c-text);
+    border-left-color: var(--c-orange-glow);
+}
+
+.nav-item.active {
+    background: linear-gradient(90deg, var(--c-orange-glow), transparent);
+    color: var(--c-orange);
+    border-left-color: var(--c-orange);
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .admin-main {
+        margin-left: 0;
+    }
+
+    .sidebar-open .admin-sidebar {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+    }
+
+    .sidebar-open .sidebar-overlay {
+        display: block;
+    }
+}
