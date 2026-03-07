@@ -5,6 +5,13 @@ set -e
 chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
 
+# Configure Apache to listen on the PORT environment variable
+if [ -n "$PORT" ]; then
+    echo "Configuring Apache to listen on port $PORT"
+    sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf
+    sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-available/000-default.conf
+fi
+
 echo "ENVIRONMENT AUDIT:"
 echo "DB_CONNECTION: $DB_CONNECTION"
 if [ -n "$DB_URL" ]; then
