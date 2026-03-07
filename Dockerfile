@@ -43,8 +43,8 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 # Make deploy script executable
 RUN chmod +x /var/www/html/scripts/deploy.sh
 
-# Expose port
-EXPOSE 80
+# Expose Render default web port fallback used in deploy.sh when PORT is unset
+EXPOSE 10000
 
 # Start with deploy script
 CMD ["/var/www/html/scripts/deploy.sh"]

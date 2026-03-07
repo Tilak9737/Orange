@@ -5,7 +5,7 @@ services:
     plan: free
     region: singapore # Change as needed
     dockerfilePath: Dockerfile
-    healthCheckPath: /
+    healthCheckPath: /up
     envVars:
       - key: APP_ENV
         value: production
