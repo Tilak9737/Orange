@@ -14,14 +14,8 @@ else
 fi
 echo "DB_HOST: $DB_HOST (should be empty if using DB_URL)"
 
-# Neon SNI workaround: explicitly set the endpoint ID
-export PGOPTIONS="-c endpoint=ep-snowy-butterfly-aive3zr8"
-
 # Clear existing configuration caches
 php artisan config:clear
-
-# Neon SNI workaround: explicitly set the endpoint ID
-export PGOPTIONS="-c endpoint=ep-snowy-butterfly-aive3zr8"
 
 # Run migrations. We already seeded locally, so just ensure schema is up to date.
 php artisan migrate --force
