@@ -1,8 +1,12 @@
-# Orange Laravel E-Commerce
+# 🍊 Orange E-Commerce
 
-Orange is a robust, dynamic e-commerce application built with Laravel. It features a modern, responsive user interface with dynamic animations, guest and authenticated cart merging, and seamless checkout flows.
+Orange is a modern, full-featured e-commerce platform designed to provide a seamless shopping experience. From smooth, engaging UI animations to robust backend inventory and cart management, Orange is built to handle the end-to-end flow of digital retail.
 
-## 📸 Screenshots
+---
+
+## 📸 Application Previews
+
+*Note: The application features a dynamic custom cursor and continuous micro-animations that are best experienced live.*
 
 ### Home Page
 ![Home Page](screenshots/1_home.png)
@@ -19,89 +23,65 @@ Orange is a robust, dynamic e-commerce application built with Laravel. It featur
 ### Login
 ![Login](screenshots/5_login.png)
 
-## 🚀 Key Features
-- **Frontend**: Clean, modern UI using Tailwind CSS, GSAP for animations, and Alpine.js.
-- **Shopping Cart**: Guest caching and automatic database merging upon login.
-- **Admin Dashboard**: Full CRUD for products, categories, coupons, and orders.
-- **Authentication**: Laravel Breeze scaffolding with robust role management.
+---
 
-## 🛠️ Local Development Setup
+## ⚡ How It Works
 
-### Prerequisites
-- PHP 8.2+
-- Composer
-- Node.js & npm
-- PostgreSQL (or SQLite/MySQL)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Tilak9737/Orange.git
-   cd Orange
-   ```
-
-2. **Install PHP dependencies**
-   ```bash
-   composer install
-   ```
-
-3. **Install Node dependencies & build assets**
-   ```bash
-   npm install
-   npm run build
-   ```
-
-4. **Environment Setup**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
-   *Configure your database settings in the `.env` file.*
-
-5. **Run Migrations & Seeders**
-   ```bash
-   php artisan migrate --seed
-   ```
-
-6. **Serve the Application**
-   ```bash
-   php artisan serve
-   ```
-   Visit `http://localhost:8000`.
+**The shopping experience is designed to be frictionless:**
+1. **Browsing & Discovery**: Users are greeted with an immersive landing page and can navigate to the Shop to browse products. All products are categorized, and their stock levels are tracked in real-time.
+2. **Guest Cart System**: Users do not need to create an account to start shopping. Items added to the cart are stored using an intelligent session/cookie-based guest cart system.
+3. **Authentication & Merging**: When a user decides to register or log in, their existing guest cart is automatically and seamlessly merged with their persistent database cart.
+4. **Checkout Flow**: Users proceed to a secure checkout where they can apply promotional coupons (with real-time validation for limits and expiration dates) and finalize their orders.
+5. **Order Management**: Users can track their past orders and order statuses.
+6. **Administrator Control**: Admins have access to a secure dashboard to manage the entire store—including creating/editing products, managing categories, tracking overall stock, defining coupon codes, and processing user orders.
 
 ---
 
-## 🌩️ Deployment Guide (Render & Neon PostgreSQL)
+## ✨ Full Feature List
 
-When deploying this application (specifically to Render using a connection-pooled database like Neon), follow these critical best practices to avoid common issues:
+### 🛒 Customer Experience
+- **Guest Checkout Support**: Shop without logging in; carts are preserved.
+- **Intelligent Cart Merging**: Guest carts are automatically merged into user accounts upon login.
+- **Dynamic Cart Calculations**: Real-time total calculation including tax and discounts.
+- **Coupon System**: Support for discount codes with complex validation (usage limits, minimum cart values, expiration dates).
+- **Order Tracking**: Detailed order history and status tracking.
+- **Wishlist**: Save favorite products for later (database-backed for users).
+- **Responsive Design**: Flawless experience across mobile, tablet, and desktop devices.
+- **Premium UI/UX**: Custom cursor, smooth scroll triggers, and glassmorphism elements.
 
-### 1. Avoiding the "Port Detection Loop"
-Render's health checks fail if your application only binds to IPv6 (`::1`) or the wrong port.
-- **Fix**: Use `deploy.sh` to dynamically force Apache to bind to IPv4 on Render's `$PORT`:
-  ```bash
-  sed -ri "s/^Listen[[:space:]]+80$/Listen 0.0.0.0:${PORT}/" /etc/apache2/ports.conf
-  ```
+### 🛡️ Administrator Dashboard
+- **Product Management**: Full CRUD (Create, Read, Update, Delete) operations for products.
+- **Inventory Tracking**: Stock level management and out-of-stock prevention.
+- **Category Control**: Organize products into dynamic categories.
+- **Coupon Engine**: Generate and manage promotional codes with specific rules.
+- **Order Fulfillment**: View, manage, and update customer order statuses.
+- **Role-Based Access Control**: Secure routes ensuring only admins can access store management tools.
 
-### 2. Fixing Mixed Content (HTTP vs HTTPS)
-Laravel sits behind Render's proxy and might generate insecure `http://` assets.
-- **Fix**: 
-  - Set `APP_URL=https://your-app.onrender.com` in Render Environment Variables.
-  - In `bootstrap/app.php`, trust all proxies: `$middleware->trustProxies(at: '*');`
-  - In `AppServiceProvider.php`, force the HTTPS scheme:
-    ```php
-    if (app()->environment('production')) {
-        \Illuminate\Support\Facades\URL::forceScheme('https');
-    }
-    ```
+---
 
-### 3. Resolving 500 Errors on Failed Login (Transaction Aborts)
-When using a pooled database (like Neon) with Laravel's `database` cache driver, rate-limiting locks can cause **Postgres 25P02 Transaction Abort** errors on failed logins.
-- **Fix**: Use the filesytem for cache and cookies for sessions on Render.
-  - Set `CACHE_STORE=file`
-  - Set `SESSION_DRIVER=cookie`
+## 🛠️ Technology Stack
 
-### 4. Neon PostgreSQL SNI Errors
-If using older `libpq` versions locally, Neon might reject connections without Endpoint IDs.
-- **Local Fix**: Prepend the endpoint ID to your password: `DB_PASSWORD=endpoint=ep-id$password`.
-- **Render Fix**: Render supports SNI natively. Use the plain password and set `DB_SSLMODE=require`.
+Orange is built on a modern, robust, and scalable stack, utilizing best-in-class tools for both frontend aesthetics and backend reliability.
+
+### Major Technologies
+- **[Laravel 12.x](https://laravel.com/)**: The core PHP framework powering the backend API, routing, authentication, and business logic.
+- **[PostgreSQL](https://www.postgresql.org/)**: The primary relational database used for robust data integrity.
+- **[Neon](https://neon.tech/)**: Serverless, true-cloud PostgreSQL providing connection pooling and scalable database hosting.
+- **[Tailwind CSS 3.x](https://tailwindcss.com/)**: Utility-first CSS framework used for rapid, custom, and responsive UI styling.
+
+### Minor / Supporting Technologies & Libraries
+- **[Alpine.js](https://alpinejs.dev/)**: Lightweight JavaScript framework for declarative, reactive frontend behaviors (dropdowns, modals, toggles).
+- **[GSAP (GreenSock)](https://gsap.com/)**: Industry-standard JavaScript animation library used for complex, timeline-based UI animations.
+- **[AOS (Animate On Scroll)](https://michalsnik.github.io/aos/)**: Lightweight library for triggering scroll-based reveal animations.
+- **[Remix Icon](https://remixicon.com/)**: Comprehensive open-source icon library used throughout the UI.
+- **[Laravel Breeze](https://laravel.com/docs/starter-kits#laravel-breeze)**: Minimal and simple authentication scaffolding.
+- **[Puppeteer (Core)](https://pptr.dev/)**: Used internally for automated full-page application screenshot generation.
+
+### Architecture & Patterns
+- **Service Pattern**: Business logic (like Cart Merging and Coupon Validation) is extracted into dedicated Service classes (e.g., `CartService`, `CouponService`) to keep Controllers thin.
+- **Dynamic Port Binding**: Built-in shell scripts to dynamically allocate Apache listening ports based on deployment environments.
+- **Session/Cookie State Management**: Used heavily for preserving guest states seamlessly before authentication.
+- **HTTPS Enforcement**: Middleware and Service Provider configurations to ensure strict secure protocol usage across load balancers/proxies.
+
+---
+*Built with ❤️ utilizing the power of Laravel and modern frontend tools.*
