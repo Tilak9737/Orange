@@ -1,59 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Orange Laravel E-Commerce
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Orange is a robust, dynamic e-commerce application built with Laravel. It features a modern, responsive user interface with dynamic animations, guest and authenticated cart merging, and seamless checkout flows.
 
-## About Laravel
+## 📸 Screenshots
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Home Page
+![Home Page](screenshots/1_home.png)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Shop Page
+![Shop Page](screenshots/2_shop.png)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Cart
+![Cart](screenshots/3_cart.png)
 
-## Learning Laravel
+### Contact
+![Contact](screenshots/4_contact.png)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Login
+![Login](screenshots/5_login.png)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Key Features
+- **Frontend**: Clean, modern UI using Tailwind CSS, GSAP for animations, and Alpine.js.
+- **Shopping Cart**: Guest caching and automatic database merging upon login.
+- **Admin Dashboard**: Full CRUD for products, categories, coupons, and orders.
+- **Authentication**: Laravel Breeze scaffolding with robust role management.
 
-## Laravel Sponsors
+## 🛠️ Local Development Setup
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prerequisites
+- PHP 8.2+
+- Composer
+- Node.js & npm
+- PostgreSQL (or SQLite/MySQL)
 
-### Premium Partners
+### Installation
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Tilak9737/Orange.git
+   cd Orange
+   ```
 
-## Contributing
+2. **Install PHP dependencies**
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+3. **Install Node dependencies & build assets**
+   ```bash
+   npm install
+   npm run build
+   ```
 
-## Code of Conduct
+4. **Environment Setup**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   *Configure your database settings in the `.env` file.*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+5. **Run Migrations & Seeders**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-## Security Vulnerabilities
+6. **Serve the Application**
+   ```bash
+   php artisan serve
+   ```
+   Visit `http://localhost:8000`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🌩️ Deployment Guide (Render & Neon PostgreSQL)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+When deploying this application (specifically to Render using a connection-pooled database like Neon), follow these critical best practices to avoid common issues:
+
+### 1. Avoiding the "Port Detection Loop"
+Render's health checks fail if your application only binds to IPv6 (`::1`) or the wrong port.
+- **Fix**: Use `deploy.sh` to dynamically force Apache to bind to IPv4 on Render's `$PORT`:
+  ```bash
+  sed -ri "s/^Listen[[:space:]]+80$/Listen 0.0.0.0:${PORT}/" /etc/apache2/ports.conf
+  ```
+
+### 2. Fixing Mixed Content (HTTP vs HTTPS)
+Laravel sits behind Render's proxy and might generate insecure `http://` assets.
+- **Fix**: 
+  - Set `APP_URL=https://your-app.onrender.com` in Render Environment Variables.
+  - In `bootstrap/app.php`, trust all proxies: `$middleware->trustProxies(at: '*');`
+  - In `AppServiceProvider.php`, force the HTTPS scheme:
+    ```php
+    if (app()->environment('production')) {
+        \Illuminate\Support\Facades\URL::forceScheme('https');
+    }
+    ```
+
+### 3. Resolving 500 Errors on Failed Login (Transaction Aborts)
+When using a pooled database (like Neon) with Laravel's `database` cache driver, rate-limiting locks can cause **Postgres 25P02 Transaction Abort** errors on failed logins.
+- **Fix**: Use the filesytem for cache and cookies for sessions on Render.
+  - Set `CACHE_STORE=file`
+  - Set `SESSION_DRIVER=cookie`
+
+### 4. Neon PostgreSQL SNI Errors
+If using older `libpq` versions locally, Neon might reject connections without Endpoint IDs.
+- **Local Fix**: Prepend the endpoint ID to your password: `DB_PASSWORD=endpoint=ep-id$password`.
+- **Render Fix**: Render supports SNI natively. Use the plain password and set `DB_SSLMODE=require`.
