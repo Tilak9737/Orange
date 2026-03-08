@@ -16,4 +16,4 @@ services:
       - key: SESSION_DRIVER
         value: cookie
       - key: CACHE_STORE
-        value: database
+        value: file
